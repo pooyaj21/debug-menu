@@ -60,8 +60,7 @@ export { useDebugMenu, useDebugPlugins };
 type Navigation = Omit<DebugMenuApi, 'params'>;
 
 const ROOT_ID = '__debug_root__';
-const STACK_ANIMATION =
-  Platform.OS === 'android' ? 'ios_from_right' : 'slide_from_right';
+const STACK_ANIMATION = 'slide_from_right';
 
 export function DebugMenuProvider({
   enabled = false,
@@ -100,7 +99,10 @@ function EnabledDebugMenuProvider({
   direction: DebugDirection;
   children: ReactNode;
 }) {
-  const screens = getScreens();
+  // iOS only. On Android the overlay shares the app's window, where something
+  // underneath cancels any press held past a few ms, so real finger taps never
+  // fire (instant adb taps do). The JS stack in a <Modal> gets its own window.
+  const screens = Platform.OS === 'ios' ? getScreens() : null;
   const pluginsRef = useRef(plugins);
   pluginsRef.current = plugins;
 

@@ -1,5 +1,11 @@
 # @pj21/debug-menu
 
+## 1.1.3
+
+### Patch Changes
+
+- Fixed buttons not responding on Android: the overlay shared the app's window, and any press held longer than an instant tap was cancelled by the app underneath, so real finger taps never opened a page. Android now renders the menu with the JS stack inside a `<Modal>` (its own window); iOS keeps the native `react-native-screens` stack.
+
 ## 1.1.2
 
 ### Patch Changes
