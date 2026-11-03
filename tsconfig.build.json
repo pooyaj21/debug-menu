@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node10",
+    "noEmit": false,
+    "rootDir": "src",
+    "declaration": false
+  },
+  "include": ["src"],
+  "exclude": [
+    "lib",
+    "node_modules",
+    "src/metro",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}

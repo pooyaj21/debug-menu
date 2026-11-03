@@ -1,0 +1,13 @@
+node_modules/
+lib/
+*.tgz
+.DS_Store
+.idea
+coverage/
+*.log
+.expo/
+example/node_modules/
+example/.expo/
+example/dist/
+example/ios/
+example/android/

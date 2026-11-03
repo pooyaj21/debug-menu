@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "debug-menu-example",
+    "slug": "debug-menu-example",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pj21.debugmenuexample"
+    },
+    "android": {
+      "package": "com.pj21.debugmenuexample"
+    }
+  }
+}
