@@ -1,5 +1,12 @@
 # @pj21/debug-menu
 
+## 1.1.1
+
+### Patch Changes
+
+- `useTapTrigger({ count, windowMs, onTrigger })` returns an `onPress` for rows that take a callback instead of children; `TapTrigger` now uses it.
+- `getNetworkRequests<T>()` from `/network` reads the logged requests (`[]` in the noop entry), so apps no longer import `react-native-network-logger` directly and production bundles stay free of it.
+
 ## 1.1.0
 
 ### Minor Changes

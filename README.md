@@ -121,15 +121,15 @@ eventsLog.log({
 
 ## Plugins
 
-| Subpath          | Export                                 | Purpose                                           |
-| ---------------- | -------------------------------------- | ------------------------------------------------- |
-| `/log`           | `createDebugLog`                       | Generic ring-buffer log + list/detail UI          |
-| `/events`        | `eventsLog`                            | Preset log for `{ name, params?, channels? }`     |
-| `/network`       | `networkPlugin`, `startNetworkLogging` | Wraps `react-native-network-logger`               |
-| `/environment`   | `environmentPlugin`                    | Select env via adapter callbacks                  |
-| `/feature-flags` | `featureFlagsPlugin`                   | Auto / On / Off overrides                         |
-| `/info`          | `infoPlugin`                           | Key/value dump + share all                        |
-| `/actions`       | `actionsPlugin`                        | Buttons (any color) in sections, optional confirm |
+| Subpath          | Export                                                                           | Purpose                                                                                                 |
+| ---------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `/log`           | `createDebugLog`                                                                 | Generic ring-buffer log + list/detail UI                                                                |
+| `/events`        | `eventsLog`                                                                      | Preset log for `{ name, params?, channels? }`                                                           |
+| `/network`       | `networkPlugin`, `startNetworkLogging`, `clearNetworkLogs`, `getNetworkRequests` | Wraps `react-native-network-logger`; import these instead of the package so production stays free of it |
+| `/environment`   | `environmentPlugin`                                                              | Select env via adapter callbacks                                                                        |
+| `/feature-flags` | `featureFlagsPlugin`                                                             | Auto / On / Off overrides                                                                               |
+| `/info`          | `infoPlugin`                                                                     | Key/value dump + share all                                                                              |
+| `/actions`       | `actionsPlugin`                                                                  | Buttons (any color) in sections, optional confirm                                                       |
 
 Plugins receive app data only through the adapter options — the provider can sit above app contexts.
 
@@ -177,6 +177,7 @@ Optional. Built-in light/dark with `mode: 'light' | 'dark' | 'system'` (default 
 
 - **Shake** — `triggers={{ shake: true }}` uses `@pj21/debug-menu/shake` (lazy `expo-sensors`). Or pass `{ subscribe }` for a custom source. Core never statically imports `expo-sensors`.
 - **Tap** — `<DebugMenu.TapTrigger count={5} windowMs={600}>` (also exported as `TapTrigger`).
+  For a row that takes a callback: `onPress: useTapTrigger({ count: 5 })`.
 
 ## Production exclusion via Metro
 

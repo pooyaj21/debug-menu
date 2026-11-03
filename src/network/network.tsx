@@ -15,6 +15,7 @@ type NetworkLoggerModule = {
   default: React.ComponentType<{ compact?: boolean }>;
   startNetworkLogging?: (options?: Record<string, unknown>) => void;
   clearRequests?: () => void;
+  getRequests?: () => unknown[];
 };
 
 function loadNetworkLogger(): NetworkLoggerModule | null {
@@ -35,6 +36,16 @@ export function startNetworkLogging(options?: Record<string, unknown>): void {
 export function clearNetworkLogs(): void {
   const mod = loadNetworkLogger();
   mod?.clearRequests?.();
+}
+
+/**
+ * Logged requests, newest first. Use this instead of importing
+ * `react-native-network-logger` directly so production (noop) bundles stay free
+ * of the package. Pass its `NetworkRequestInfo` type as `T` (type-only import).
+ */
+export function getNetworkRequests<T = unknown>(): T[] {
+  const mod = loadNetworkLogger();
+  return (mod?.getRequests?.() ?? []) as T[];
 }
 
 function MissingNetworkLogger() {

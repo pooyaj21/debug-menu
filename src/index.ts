@@ -3,7 +3,11 @@ import { DebugMenu as DebugMenuController } from './controller';
 
 export { DebugMenuProvider, useDebugMenu } from './context';
 export type { DebugMenuProviderProps } from './context';
-export { TapTrigger } from './components/TapTrigger';
+export { TapTrigger, useTapTrigger } from './components/TapTrigger';
+export type {
+  TapTriggerProps,
+  TapTriggerOptions,
+} from './components/TapTrigger';
 export {
   Page,
   Header,

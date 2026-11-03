@@ -52,6 +52,9 @@ export const DebugMenu = {
 
 export const DebugMenuProvider = NoopProvider;
 export const TapTrigger = DebugMenu.TapTrigger;
+export function useTapTrigger(_options?: unknown): () => void {
+  return () => undefined;
+}
 
 export const Page = ({ children }: { children?: ReactNode }) => <>{children}</>;
 export const Header = () => null;
@@ -83,6 +86,9 @@ export function networkPlugin(_options?: unknown) {
 }
 export function startNetworkLogging(_options?: unknown) {}
 export function clearNetworkLogs() {}
+export function getNetworkRequests<T = unknown>(): T[] {
+  return [];
+}
 
 export function environmentPlugin(_options?: unknown) {
   return emptyPlugin('environment', 'Environment');
