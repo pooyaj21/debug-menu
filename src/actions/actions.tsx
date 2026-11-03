@@ -8,7 +8,15 @@ export type DebugAction = {
   label: string;
   onPress: () => void | Promise<void>;
   destructive?: boolean;
+  /** Button background color, e.g. a warning orange. Wins over `destructive`. */
+  color?: string;
   confirm?: string | boolean;
+};
+
+export type DebugActionSection = {
+  title?: string;
+  note?: string;
+  actions: DebugAction[];
 };
 
 export type ActionsPluginOptions = {
@@ -16,10 +24,18 @@ export type ActionsPluginOptions = {
   title?: string;
   section?: string;
   order?: number;
-  actions: DebugAction[];
-};
+  /** Shown above the sections. */
+  note?: string;
+} & (
+  | { actions: DebugAction[]; sections?: never }
+  | { sections: DebugActionSection[]; actions?: never }
+);
 
 export function actionsPlugin(options: ActionsPluginOptions): DebugPlugin {
+  const sections: DebugActionSection[] = options.sections ?? [
+    { actions: options.actions ?? [] },
+  ];
+
   function ActionsPage() {
     const theme = useDebugTheme();
     const [pending, setPending] = useState<DebugAction | null>(null);
@@ -31,13 +47,19 @@ export function actionsPlugin(options: ActionsPluginOptions): DebugPlugin {
 
     return (
       <Page title={options.title ?? 'Actions'}>
-        <Section>
-          <View style={{ gap: 10 }}>
-            {options.actions.map((action) => (
+        {options.note ? <Section note={options.note} /> : null}
+        {sections.map((section, index) => (
+          <Section
+            key={section.title ?? index}
+            title={section.title}
+            note={section.note}
+          >
+            {section.actions.map((action) => (
               <Button
                 key={action.label}
                 label={action.label}
                 destructive={action.destructive}
+                color={action.color}
                 onPress={() => {
                   if (action.confirm) {
                     setPending(action);
@@ -47,8 +69,8 @@ export function actionsPlugin(options: ActionsPluginOptions): DebugPlugin {
                 }}
               />
             ))}
-          </View>
-        </Section>
+          </Section>
+        ))}
 
         <Modal visible={pending != null} transparent animationType="fade">
           <View

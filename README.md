@@ -70,6 +70,21 @@ const plugins = [
       { label: 'Reset onboarding', onPress: resetOnboarding, confirm: true },
     ],
   }),
+  // Or grouped, with any button color:
+  actionsPlugin({
+    id: 'playground',
+    title: 'Playground',
+    sections: [
+      {
+        title: 'Toasts',
+        note: 'Shown above the menu',
+        actions: [
+          { label: 'Warning', color: '#F85E00', onPress: showWarning },
+          { label: 'Error', destructive: true, onPress: showError },
+        ],
+      },
+    ],
+  }),
 ];
 
 export function App() {
@@ -106,15 +121,15 @@ eventsLog.log({
 
 ## Plugins
 
-| Subpath          | Export                                 | Purpose                                       |
-| ---------------- | -------------------------------------- | --------------------------------------------- |
-| `/log`           | `createDebugLog`                       | Generic ring-buffer log + list/detail UI      |
-| `/events`        | `eventsLog`                            | Preset log for `{ name, params?, channels? }` |
-| `/network`       | `networkPlugin`, `startNetworkLogging` | Wraps `react-native-network-logger`           |
-| `/environment`   | `environmentPlugin`                    | Select env via adapter callbacks              |
-| `/feature-flags` | `featureFlagsPlugin`                   | Auto / On / Off overrides                     |
-| `/info`          | `infoPlugin`                           | Key/value dump + share all                    |
-| `/actions`       | `actionsPlugin`                        | Buttons with optional confirm                 |
+| Subpath          | Export                                 | Purpose                                           |
+| ---------------- | -------------------------------------- | ------------------------------------------------- |
+| `/log`           | `createDebugLog`                       | Generic ring-buffer log + list/detail UI          |
+| `/events`        | `eventsLog`                            | Preset log for `{ name, params?, channels? }`     |
+| `/network`       | `networkPlugin`, `startNetworkLogging` | Wraps `react-native-network-logger`               |
+| `/environment`   | `environmentPlugin`                    | Select env via adapter callbacks                  |
+| `/feature-flags` | `featureFlagsPlugin`                   | Auto / On / Off overrides                         |
+| `/info`          | `infoPlugin`                           | Key/value dump + share all                        |
+| `/actions`       | `actionsPlugin`                        | Buttons (any color) in sections, optional confirm |
 
 Plugins receive app data only through the adapter options — the provider can sit above app contexts.
 

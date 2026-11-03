@@ -23,6 +23,10 @@ export type EnvironmentPluginOptions = {
 export function environmentPlugin(
   options: EnvironmentPluginOptions,
 ): DebugPlugin {
+  // Ids can be opaque (e.g. numeric enums); people read the label.
+  const labelOf = (id: string) =>
+    options.list.find((item) => item.id === id)?.label ?? id;
+
   function EnvironmentPage() {
     const theme = useDebugTheme();
     const [, bump] = useState(0);
@@ -73,7 +77,7 @@ export function environmentPlugin(
             })}
           </View>
         </Section>
-        <Text muted>Current: {selected}</Text>
+        <Text muted>Current: {labelOf(selected)}</Text>
       </Page>
     );
   }
@@ -83,7 +87,7 @@ export function environmentPlugin(
     title: options.title ?? 'Environment',
     section: options.section ?? 'Inspect',
     order: options.order ?? 30,
-    badge: () => options.current(),
+    badge: () => labelOf(options.current()),
     component: EnvironmentPage,
   };
 }

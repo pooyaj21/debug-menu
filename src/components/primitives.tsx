@@ -125,14 +125,18 @@ export function Page({
   right,
   children,
   scroll = true,
+  padded = true,
 }: {
   title: string;
   right?: ReactNode;
   children: ReactNode;
   scroll?: boolean;
+  /** false: content runs edge to edge (only the safe-area bottom is kept). */
+  padded?: boolean;
 }) {
   const theme = useDebugTheme();
   const insets = useSafeInsets();
+  const contentStyle = padded ? styles.pageContent : undefined;
 
   return (
     <View
@@ -146,8 +150,8 @@ export function Page({
         <ScrollView
           style={styles.flex}
           contentContainerStyle={[
-            styles.pageContent,
-            { paddingBottom: 20 + insets.bottom },
+            contentStyle,
+            { paddingBottom: (padded ? 20 : 0) + insets.bottom },
           ]}
           keyboardShouldPersistTaps="handled"
         >
@@ -155,11 +159,7 @@ export function Page({
         </ScrollView>
       ) : (
         <View
-          style={[
-            styles.flex,
-            styles.pageContent,
-            { paddingBottom: insets.bottom },
-          ]}
+          style={[styles.flex, contentStyle, { paddingBottom: insets.bottom }]}
         >
           {children}
         </View>
@@ -245,12 +245,15 @@ export function Button({
   label,
   onPress,
   destructive,
+  color,
   icon,
   style,
 }: {
   label: string;
   onPress: () => void;
   destructive?: boolean;
+  /** Background color; wins over `destructive`. Label uses `onAction`. */
+  color?: string;
   icon?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }) {
@@ -262,9 +265,8 @@ export function Button({
       style={({ pressed }) => [
         styles.button,
         {
-          backgroundColor: destructive
-            ? theme.colors.danger
-            : theme.colors.action,
+          backgroundColor:
+            color ?? (destructive ? theme.colors.danger : theme.colors.action),
           opacity: pressed ? 0.8 : 1,
         },
         style,

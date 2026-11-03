@@ -58,7 +58,7 @@ export function networkPlugin(options: NetworkPluginOptions = {}): DebugPlugin {
     }
     const Logger = mod.default;
     return (
-      <Page title={title} scroll={false}>
+      <Page title={title} scroll={false} padded={false}>
         <View style={{ flex: 1 }}>
           <Logger compact={compact} />
         </View>

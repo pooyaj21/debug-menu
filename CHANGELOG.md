@@ -1,5 +1,17 @@
 # @pj21/debug-menu
 
+## 1.1.0
+
+### Minor Changes
+
+- `actionsPlugin` accepts `sections: [{ title, note, actions }]` (instead of a flat `actions` list) and a page-level `note`.
+- Actions and `Button` take a `color` for the background, so buttons are no longer limited to default / destructive red.
+
+### Patch Changes
+
+- Network page runs edge to edge: `Page` takes `padded={false}`, and the network logger no longer sits inside the 20pt content padding.
+- `environmentPlugin` shows the selected item's label (not its id) in the home badge and the "Current" line, so numeric ids no longer appear as "Environment (1)".
+
 ## 1.0.0
 
 ### Major Changes
