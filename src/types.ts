@@ -41,6 +41,8 @@ export type DebugThemeTokens = {
 
 export type DebugThemeMode = 'light' | 'dark' | 'system';
 
+export type DebugDirection = 'ltr' | 'rtl' | 'inherit';
+
 export type DebugThemeConfig = {
   mode?: DebugThemeMode;
   colors?: Partial<DebugThemeColors>;

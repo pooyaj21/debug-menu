@@ -1,5 +1,12 @@
 # @pj21/debug-menu
 
+## 1.1.2
+
+### Patch Changes
+
+- The menu is laid out left-to-right by default, also inside RTL apps. New `direction` prop on `DebugMenuProvider`: `'ltr'` (default), `'rtl'` or `'inherit'`.
+- Fixed the back arrow coming out reversed in RTL: React Native swapped its `left` offsets but not its stroke rotations. The icon is now pinned to LTR internally and mirrored as a whole when the menu is RTL.
+
 ## 1.1.1
 
 ### Patch Changes

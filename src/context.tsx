@@ -6,7 +6,14 @@ import React, {
   useState,
   type ReactNode,
 } from 'react';
-import { BackHandler, Modal, Platform, StyleSheet, View } from 'react-native';
+import {
+  BackHandler,
+  I18nManager,
+  Modal,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { DebugMenu, registerDebugMenuController } from './controller';
 import {
   createHomeEntry,
@@ -19,11 +26,13 @@ import { useShakeTrigger } from './triggers/useShakeTrigger';
 import { getSafeArea, getScreens } from './optional';
 import {
   DebugMenuContext,
+  DirectionContext,
   PluginsContext,
   useDebugMenu,
   useDebugPlugins,
 } from './menuContext';
 import type {
+  DebugDirection,
   DebugMenuApi,
   DebugPageParams,
   DebugPlugin,
@@ -38,6 +47,11 @@ export type DebugMenuProviderProps = {
   plugins: DebugPlugin[];
   theme?: DebugThemeConfig;
   triggers?: DebugTriggers;
+  /**
+   * Layout direction of the menu. Defaults to 'ltr' so an RTL app still gets
+   * a left-to-right debug menu; 'inherit' follows the app's direction.
+   */
+  direction?: DebugDirection;
   children: ReactNode;
 };
 
@@ -54,6 +68,7 @@ export function DebugMenuProvider({
   plugins,
   theme,
   triggers,
+  direction = 'ltr',
   children,
 }: DebugMenuProviderProps) {
   if (!enabled) {
@@ -65,6 +80,7 @@ export function DebugMenuProvider({
       plugins={plugins}
       theme={theme}
       triggers={triggers}
+      direction={direction}
     >
       {children}
     </EnabledDebugMenuProvider>
@@ -75,11 +91,13 @@ function EnabledDebugMenuProvider({
   plugins,
   theme,
   triggers,
+  direction,
   children,
 }: {
   plugins: DebugPlugin[];
   theme?: DebugThemeConfig;
   triggers?: DebugTriggers;
+  direction: DebugDirection;
   children: ReactNode;
 }) {
   const screens = getScreens();
@@ -238,14 +256,26 @@ function EnabledDebugMenuProvider({
   ) : null;
 
   const SafeAreaProvider = getSafeArea()?.SafeAreaProvider;
+  // 'inherit' can't read a parent's style direction; I18nManager is the best guess.
+  const resolvedDirection =
+    direction === 'inherit' ? (I18nManager.isRTL ? 'rtl' : 'ltr') : direction;
   const menu = (
-    <DebugThemeProvider config={theme}>
-      {SafeAreaProvider ? (
-        <SafeAreaProvider style={styles.fill}>{content}</SafeAreaProvider>
-      ) : (
-        <View style={styles.fill}>{content}</View>
-      )}
-    </DebugThemeProvider>
+    <DirectionContext.Provider value={resolvedDirection}>
+      <DebugThemeProvider config={theme}>
+        <View
+          style={[
+            styles.fill,
+            direction === 'inherit' ? undefined : { direction },
+          ]}
+        >
+          {SafeAreaProvider ? (
+            <SafeAreaProvider style={styles.fill}>{content}</SafeAreaProvider>
+          ) : (
+            content
+          )}
+        </View>
+      </DebugThemeProvider>
+    </DirectionContext.Provider>
   );
 
   return (

@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React, { useContext, type ReactNode } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -10,7 +10,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useDebugTheme } from '../theme/ThemeContext';
-import { useDebugMenu } from '../menuContext';
+import { DirectionContext, useDebugMenu } from '../menuContext';
 import { useSafeInsets } from '../optional';
 import type { DebugThemeTokens } from '../types';
 
@@ -66,10 +66,20 @@ export function Text({
   );
 }
 
-/** Left arrow drawn with views, so the core needs no SVG dependency. */
+/**
+ * Back arrow drawn with views, so the core needs no SVG dependency. The box is
+ * pinned to LTR (RN swaps `left` in RTL, which would break the strokes) and
+ * mirrored as a whole in RTL, where "back" points right.
+ */
 function BackIcon({ color }: { color: string }) {
+  const direction = useContext(DirectionContext);
   return (
-    <View style={styles.icon}>
+    <View
+      style={[
+        styles.icon,
+        direction === 'rtl' ? styles.iconMirrored : undefined,
+      ]}
+    >
       <View style={[styles.iconShaft, { backgroundColor: color }]} />
       <View
         style={[styles.iconHead, styles.iconHeadUp, { backgroundColor: color }]}
@@ -301,7 +311,8 @@ const styles = StyleSheet.create({
   headerTitle: { flex: 1, fontSize: 18, marginEnd: 8 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   // 24x24 box: shaft (5,12)->(19,12), head strokes (5,12)->(10,7) and (10,17).
-  icon: { width: 24, height: 24 },
+  icon: { width: 24, height: 24, direction: 'ltr' },
+  iconMirrored: { transform: [{ scaleX: -1 }] },
   iconShaft: {
     position: 'absolute',
     left: 4,

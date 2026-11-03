@@ -173,6 +173,10 @@ Optional. Built-in light/dark with `mode: 'light' | 'dark' | 'system'` (default 
 >
 ```
 
+## Direction
+
+The menu is left-to-right by default, even in an RTL app. Pass `direction="rtl"` to mirror it, or `direction="inherit"` to follow the app.
+
 ## Triggers
 
 - **Shake** — `triggers={{ shake: true }}` uses `@pj21/debug-menu/shake` (lazy `expo-sensors`). Or pass `{ subscribe }` for a custom source. Core never statically imports `expo-sensors`.

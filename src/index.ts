@@ -32,6 +32,7 @@ export type {
   DebugThemeFonts,
   DebugThemeTokens,
   DebugThemeMode,
+  DebugDirection,
   DebugTriggers,
   DebugMenuApi,
   DebugPageParams,

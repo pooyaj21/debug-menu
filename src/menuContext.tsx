@@ -3,6 +3,8 @@ import type { DebugMenuApi, DebugPlugin } from './types';
 
 export const DebugMenuContext = createContext<DebugMenuApi | null>(null);
 export const PluginsContext = createContext<DebugPlugin[]>([]);
+/** Resolved layout direction of the menu, for direction-aware drawing. */
+export const DirectionContext = createContext<'ltr' | 'rtl'>('ltr');
 
 export function useDebugMenu(): DebugMenuApi {
   const value = useContext(DebugMenuContext);
