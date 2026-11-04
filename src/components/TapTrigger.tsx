@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, type ReactNode } from 'react';
-import { Pressable, type StyleProp, type ViewStyle } from 'react-native';
+import { type StyleProp, type ViewStyle } from 'react-native';
 import { DebugMenu } from '../controller';
+import { DebugPressable } from './DebugPressable';
 
 export type TapTriggerProps = {
   count?: number;
@@ -51,8 +52,8 @@ export function TapTrigger({
   const onPress = useTapTrigger({ count, windowMs, onTrigger });
 
   return (
-    <Pressable onPress={onPress} style={style}>
+    <DebugPressable onPress={onPress} style={style}>
       {children}
-    </Pressable>
+    </DebugPressable>
   );
 }

@@ -23,7 +23,7 @@ import {
 import { DebugThemeProvider } from './theme/ThemeContext';
 import { HomePage } from './components/HomePage';
 import { useShakeTrigger } from './triggers/useShakeTrigger';
-import { getSafeArea, getScreens } from './optional';
+import { getGestureHandler, getSafeArea, getScreens } from './optional';
 import {
   DebugMenuContext,
   DirectionContext,
@@ -258,10 +258,11 @@ function EnabledDebugMenuProvider({
   ) : null;
 
   const SafeAreaProvider = getSafeArea()?.SafeAreaProvider;
+  const GestureHandlerRootView = getGestureHandler()?.GestureHandlerRootView;
   // 'inherit' can't read a parent's style direction; I18nManager is the best guess.
   const resolvedDirection =
     direction === 'inherit' ? (I18nManager.isRTL ? 'rtl' : 'ltr') : direction;
-  const menu = (
+  const menuBody = (
     <DirectionContext.Provider value={resolvedDirection}>
       <DebugThemeProvider config={theme}>
         <View
@@ -278,6 +279,15 @@ function EnabledDebugMenuProvider({
         </View>
       </DebugThemeProvider>
     </DirectionContext.Provider>
+  );
+  // RNGH gestures need a root; Android <Modal> is a new window so the app-level
+  // root does not cover it.
+  const menu = GestureHandlerRootView ? (
+    <GestureHandlerRootView style={styles.fill}>
+      {menuBody}
+    </GestureHandlerRootView>
+  ) : (
+    menuBody
   );
 
   return (

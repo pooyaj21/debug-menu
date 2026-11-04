@@ -4,7 +4,8 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
-import { Pressable, Share, TextInput, View } from 'react-native';
+import { Share, TextInput, View } from 'react-native';
+import { DebugPressable } from '../components/DebugPressable';
 import { Button, ListItem, Page, Text } from '../components/primitives';
 import { useDebugMenu } from '../menuContext';
 import { useDebugTheme } from '../theme/ThemeContext';
@@ -116,9 +117,9 @@ export function createDebugLog<
       <Page
         title={options.getTitle(entry)}
         right={
-          <Pressable onPress={() => shareText(json)} hitSlop={8}>
+          <DebugPressable onPress={() => shareText(json)} hitSlop={8}>
             <Text style={{ fontSize: 16 }}>Share</Text>
-          </Pressable>
+          </DebugPressable>
         }
       >
         {options.renderDetail ? (
@@ -157,11 +158,11 @@ export function createDebugLog<
         title={options.title}
         right={
           entries.length > 0 ? (
-            <Pressable onPress={onClear} hitSlop={8}>
+            <DebugPressable onPress={onClear} hitSlop={8}>
               <Text style={{ color: theme.colors.primary, fontSize: 16 }}>
                 Clear
               </Text>
-            </Pressable>
+            </DebugPressable>
           ) : undefined
         }
       >

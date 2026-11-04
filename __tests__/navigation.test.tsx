@@ -8,6 +8,7 @@ import type { DebugPlugin } from '../src/types';
 jest.mock('../src/optional', () => ({
   getScreens: () => null,
   getSafeArea: () => null,
+  getGestureHandler: () => null,
   useSafeInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
 }));
 

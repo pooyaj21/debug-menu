@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { DebugMenu, DebugMenuProvider, TapTrigger } from '@pj21/debug-menu';
@@ -26,6 +26,36 @@ export default function App() {
     Record<string, boolean | undefined>
   >({});
   const [bootCount, setBootCount] = useState(0);
+  const [heavyLoad, setHeavyLoad] = useState(false);
+  const heavyLoadRef = useRef(heavyLoad);
+  heavyLoadRef.current = heavyLoad;
+
+  useEffect(() => {
+    if (!heavyLoad) return;
+
+    // Busy-wait ~100–150ms on a ~100ms cadence so the JS thread stays saturated
+    // while still yielding briefly between slices (reproduces missed menu taps).
+    const timer = setInterval(() => {
+      const end = Date.now() + 100 + Math.floor(Math.random() * 51);
+      while (Date.now() < end) {
+        // intentional JS-thread block
+      }
+      if (!heavyLoadRef.current) return;
+
+      const stamp = Date.now();
+      for (let i = 0; i < 4; i += 1) {
+        eventsLog.log({
+          name: 'heavy_load_tick',
+          params: { i, stamp },
+          channels: ['debug'],
+        });
+        notesLog.log({ message: `Heavy load note ${stamp}-${i}` });
+      }
+      void fetch(`https://httpbin.org/get?_=${stamp}`).catch(() => undefined);
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [heavyLoad]);
 
   const plugins = useMemo(
     () => [
@@ -56,10 +86,18 @@ export default function App() {
           environment: env,
           bootCount,
           package: '@pj21/debug-menu',
+          heavyLoad: heavyLoad ? 'on' : 'off',
         }),
       }),
       actionsPlugin({
         actions: [
+          {
+            label: heavyLoad
+              ? 'Stop heavy JS load'
+              : 'Simulate heavy JS load',
+            color: heavyLoad ? '#b45309' : undefined,
+            onPress: () => setHeavyLoad((value) => !value),
+          },
           {
             label: 'Log sample analytics event',
             onPress: () =>
@@ -89,7 +127,7 @@ export default function App() {
         ],
       }),
     ],
-    [env, overrides, bootCount],
+    [env, overrides, bootCount, heavyLoad],
   );
 
   return (
@@ -105,9 +143,20 @@ export default function App() {
           <Text style={styles.title}>debug-menu example</Text>
           <Text style={styles.body}>
             Shake the device, tap Open, or 5-tap the version label.
+            {heavyLoad
+              ? ' Heavy JS load is ON — try tapping plugin buttons / Back.'
+              : ''}
           </Text>
           <Pressable style={styles.button} onPress={() => DebugMenu.open()}>
             <Text style={styles.buttonLabel}>Open debug menu</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.button, heavyLoad ? styles.buttonWarn : null]}
+            onPress={() => setHeavyLoad((value) => !value)}
+          >
+            <Text style={styles.buttonLabel}>
+              {heavyLoad ? 'Stop heavy JS load' : 'Simulate heavy JS load'}
+            </Text>
           </Pressable>
           <TapTrigger count={5} windowMs={600}>
             <Text style={styles.version}>v0.1.0 (tap ×5)</Text>
@@ -135,6 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
   },
+  buttonWarn: { backgroundColor: '#b45309' },
   buttonLabel: { color: '#fff', fontWeight: '600', fontSize: 16 },
   version: { marginTop: 24, color: '#888', textAlign: 'center' },
 });

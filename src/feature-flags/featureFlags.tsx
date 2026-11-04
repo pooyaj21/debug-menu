@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
+import { DebugPressable } from '../components/DebugPressable';
 import { Button, Page, Section, Text } from '../components/primitives';
 import { useDebugTheme } from '../theme/ThemeContext';
 import type { DebugPlugin } from '../types';
@@ -63,7 +64,7 @@ export function featureFlagsPlugin(
                     {CHOICES.map((choice) => {
                       const selected = override === choice.value;
                       return (
-                        <Pressable
+                        <DebugPressable
                           key={choice.label}
                           onPress={() => {
                             options.set(flag.key, choice.value);
@@ -90,7 +91,7 @@ export function featureFlagsPlugin(
                           >
                             {choice.label}
                           </Text>
-                        </Pressable>
+                        </DebugPressable>
                       );
                     })}
                   </View>

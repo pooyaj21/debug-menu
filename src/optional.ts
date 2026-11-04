@@ -2,6 +2,7 @@ import { Dimensions, Platform, StatusBar } from 'react-native';
 
 type ScreensModule = typeof import('react-native-screens');
 type SafeAreaModule = typeof import('react-native-safe-area-context');
+type GestureHandlerModule = typeof import('react-native-gesture-handler');
 
 export type Insets = {
   top: number;
@@ -26,12 +27,24 @@ try {
   safeArea = null;
 }
 
+let gestureHandler: GestureHandlerModule | null = null;
+try {
+  gestureHandler =
+    require('react-native-gesture-handler') as GestureHandlerModule;
+} catch {
+  gestureHandler = null;
+}
+
 export function getScreens(): ScreensModule | null {
   return screens;
 }
 
 export function getSafeArea(): SafeAreaModule | null {
   return safeArea;
+}
+
+export function getGestureHandler(): GestureHandlerModule | null {
+  return gestureHandler;
 }
 
 // Rough insets for apps without react-native-safe-area-context.

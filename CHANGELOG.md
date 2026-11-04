@@ -1,5 +1,11 @@
 # @pj21/debug-menu
 
+## 1.1.4
+
+### Patch Changes
+
+- Fixed menu taps being dropped under heavy app load on Android and iOS: React Native's `Pressable` is recognised on the JS thread, so with the thread busy a slight finger drift let the scroll view take the touch and `onPress` never fired. With `react-native-gesture-handler` installed (new optional peer), menu buttons now use its `Pressable`, recognised on the UI thread, and the menu is wrapped in its own `GestureHandlerRootView` (the Android `<Modal>` is a separate window). Without it, presses fall back to RN `Pressable` with `cancelable={false}`.
+
 ## 1.1.3
 
 ### Patch Changes

@@ -1,6 +1,5 @@
 import React, { useContext, type ReactNode } from 'react';
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as RNText,
@@ -13,6 +12,7 @@ import { useDebugTheme } from '../theme/ThemeContext';
 import { DirectionContext, useDebugMenu } from '../menuContext';
 import { useSafeInsets } from '../optional';
 import type { DebugThemeTokens } from '../types';
+import { DebugPressable } from './DebugPressable';
 
 type Weight = 'regular' | 'medium' | 'bold';
 
@@ -101,7 +101,7 @@ export function Header({ title, right }: { title: string; right?: ReactNode }) {
 
   return (
     <View style={[styles.header, { backgroundColor: theme.colors.background }]}>
-      <Pressable
+      <DebugPressable
         accessibilityRole="button"
         accessibilityLabel="Back"
         onPress={menu.back}
@@ -112,7 +112,7 @@ export function Header({ title, right }: { title: string; right?: ReactNode }) {
         ]}
       >
         <BackIcon color={theme.colors.text} />
-      </Pressable>
+      </DebugPressable>
       <RNText
         numberOfLines={1}
         adjustsFontSizeToFit
@@ -240,12 +240,12 @@ export function ListItem({
 
   if (!onPress) return content;
   return (
-    <Pressable
+    <DebugPressable
       onPress={onPress}
       style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
     >
       {content}
-    </Pressable>
+    </DebugPressable>
   );
 }
 
@@ -269,7 +269,7 @@ export function Button({
 }) {
   const theme = useDebugTheme();
   return (
-    <Pressable
+    <DebugPressable
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => [
@@ -286,7 +286,7 @@ export function Button({
       <Text style={{ color: theme.colors.onAction, textAlign: 'center' }}>
         {label}
       </Text>
-    </Pressable>
+    </DebugPressable>
   );
 }
 

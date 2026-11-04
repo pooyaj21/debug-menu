@@ -5,7 +5,7 @@ In-app **debug menu** for **Expo / React Native**. Pure JavaScript — no native
 - Own page stack, no react-navigation dependency. On iOS with `react-native-screens` installed it is a native stack: pages slide in from the right and swipe back from anywhere. On Android, and without it, a plain JS stack in a `<Modal>`
 - Safe-area aware via `react-native-safe-area-context` (approximate fallback insets without it)
 - Built-in plugins: log, analytics events, network, environment, feature flags, info, actions
-- Optional peers only: `react-native-screens`, `react-native-safe-area-context`, `expo-sensors`, `react-native-network-logger`
+- Optional peers only: `react-native-screens`, `react-native-safe-area-context`, `react-native-gesture-handler`, `expo-sensors`, `react-native-network-logger`
 - Production exclusion via `withDebugMenu` → noop entry
 
 ## Installation
@@ -14,10 +14,10 @@ In-app **debug menu** for **Expo / React Native**. Pure JavaScript — no native
 npm install @pj21/debug-menu
 ```
 
-Optional (any expo-router / react-navigation app already has the first two):
+Optional (any expo-router / react-navigation app already has the first three). With `react-native-gesture-handler` installed, menu taps are recognised on the UI thread, so they still fire while the app's JS thread is busy:
 
 ```sh
-npx expo install react-native-screens react-native-safe-area-context
+npx expo install react-native-screens react-native-safe-area-context react-native-gesture-handler
 npx expo install expo-sensors
 npm install react-native-network-logger
 ```

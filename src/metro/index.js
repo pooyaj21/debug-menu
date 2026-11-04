@@ -12,8 +12,9 @@ function isDebugMenuImport(moduleName) {
  * Preserves any existing `resolver.resolveRequest`.
  *
  * When enabled, turns on `transformer.allowOptionalDependencies` (Expo already
- * does) so the optional peers `react-native-screens` and
- * `react-native-safe-area-context` may be missing in bare RN apps.
+ * does) so optional peers (`react-native-screens`,
+ * `react-native-safe-area-context`, `react-native-gesture-handler`) may be
+ * missing in bare RN apps.
  */
 function withDebugMenu(metroConfig, options) {
   if (!options || options.enabled) {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Pressable, View } from 'react-native';
+import { Modal, View } from 'react-native';
+import { DebugPressable } from '../components/DebugPressable';
 import { Button, Page, Section, Text } from '../components/primitives';
 import { useDebugTheme } from '../theme/ThemeContext';
 import type { DebugPlugin } from '../types';
@@ -105,10 +106,10 @@ export function actionsPlugin(options: ActionsPluginOptions): DebugPlugin {
                   gap: 16,
                 }}
               >
-                <Pressable onPress={() => setPending(null)}>
+                <DebugPressable onPress={() => setPending(null)}>
                   <Text>Cancel</Text>
-                </Pressable>
-                <Pressable
+                </DebugPressable>
+                <DebugPressable
                   onPress={() => {
                     if (pending) void run(pending);
                   }}
@@ -118,7 +119,7 @@ export function actionsPlugin(options: ActionsPluginOptions): DebugPlugin {
                   >
                     Confirm
                   </Text>
-                </Pressable>
+                </DebugPressable>
               </View>
             </View>
           </View>
