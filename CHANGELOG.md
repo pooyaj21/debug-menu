@@ -1,5 +1,11 @@
 # @pj21/debug-menu
 
+## 1.2.0
+
+### Minor Changes
+
+- New `/convex` subpath: Convex runs queries, mutations and actions over a WebSocket, which the Network page can't see. Pass `loggedWebSocket` as `ConvexReactClient`'s `webSocketConstructor` and add `convexPlugin()` for a Convex page listing queries (subscriptions and update counts), mutations and actions (args, result or error, duration, server log lines), connection and auth events, and raw frames, with auth tokens redacted. In the noop entry `loggedWebSocket` is the plain `WebSocket`, so production needs no `__DEV__` guard.
+
 ## 1.1.4
 
 ### Patch Changes

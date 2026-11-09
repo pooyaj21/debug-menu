@@ -90,6 +90,21 @@ export function getNetworkRequests<T = unknown>(): T[] {
   return [];
 }
 
+export function convexPlugin(_options?: unknown) {
+  return emptyPlugin('convex', 'Convex');
+}
+export const loggedWebSocket: typeof WebSocket =
+  typeof WebSocket !== 'undefined'
+    ? WebSocket
+    : (undefined as unknown as typeof WebSocket);
+export function withConvexLogging<T>(Base: T): T {
+  return Base;
+}
+export function getConvexEvents<T = unknown>(): T[] {
+  return [];
+}
+export function clearConvexEvents() {}
+
 export function environmentPlugin(_options?: unknown) {
   return emptyPlugin('environment', 'Environment');
 }

@@ -1,6 +1,6 @@
 {
   "name": "@pj21/debug-menu",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "publishConfig": {
     "access": "public"
   },
@@ -46,6 +46,13 @@
       "import": "./lib/module/network/index.js",
       "require": "./lib/commonjs/network/index.js",
       "default": "./lib/commonjs/network/index.js"
+    },
+    "./convex": {
+      "react-native": "./src/convex/index.ts",
+      "types": "./lib/typescript/convex/index.d.ts",
+      "import": "./lib/module/convex/index.js",
+      "require": "./lib/commonjs/convex/index.js",
+      "default": "./lib/commonjs/convex/index.js"
     },
     "./environment": {
       "react-native": "./src/environment/index.ts",
@@ -107,6 +114,9 @@
       "network": [
         "lib/typescript/network/index.d.ts"
       ],
+      "convex": [
+        "lib/typescript/convex/index.d.ts"
+      ],
       "environment": [
         "lib/typescript/environment/index.d.ts"
       ],
@@ -151,7 +161,9 @@
     "debug-menu",
     "developer-tools",
     "network-logger",
-    "feature-flags"
+    "feature-flags",
+    "convex",
+    "websocket"
   ],
   "author": "Pooya Jalali",
   "license": "MIT",

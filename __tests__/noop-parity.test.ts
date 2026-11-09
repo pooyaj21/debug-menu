@@ -20,6 +20,11 @@ const EXPECTED_KEYS = [
   'startNetworkLogging',
   'clearNetworkLogs',
   'getNetworkRequests',
+  'convexPlugin',
+  'loggedWebSocket',
+  'withConvexLogging',
+  'getConvexEvents',
+  'clearConvexEvents',
   'environmentPlugin',
   'featureFlagsPlugin',
   'infoPlugin',
@@ -52,5 +57,12 @@ describe('noop entry parity', () => {
     });
     expect(() => log.log({ name: 'x' })).not.toThrow();
     expect(log.getAll()).toEqual([]);
+  });
+
+  it('convex helpers pass the WebSocket through untouched', () => {
+    class FakeWebSocket {}
+    expect(noop.withConvexLogging(FakeWebSocket)).toBe(FakeWebSocket);
+    expect(noop.getConvexEvents()).toEqual([]);
+    expect(() => noop.clearConvexEvents()).not.toThrow();
   });
 });

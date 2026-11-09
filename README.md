@@ -4,7 +4,7 @@ In-app **debug menu** for **Expo / React Native**. Pure JavaScript — no native
 
 - Own page stack, no react-navigation dependency. On iOS with `react-native-screens` installed it is a native stack: pages slide in from the right and swipe back from anywhere. On Android, and without it, a plain JS stack in a `<Modal>`
 - Safe-area aware via `react-native-safe-area-context` (approximate fallback insets without it)
-- Built-in plugins: log, analytics events, network, environment, feature flags, info, actions
+- Built-in plugins: log, analytics events, network, Convex, environment, feature flags, info, actions
 - Optional peers only: `react-native-screens`, `react-native-safe-area-context`, `react-native-gesture-handler`, `expo-sensors`, `react-native-network-logger`
 - Production exclusion via `withDebugMenu` → noop entry
 
@@ -119,17 +119,35 @@ eventsLog.log({
 });
 ```
 
+### Convex
+
+Convex runs queries, mutations and actions over a WebSocket, which the Network page (XHR) can't see. Pass `loggedWebSocket` to `ConvexReactClient` and add the Convex page: it lists queries (subscriptions and update counts), mutations and actions (args, result or error, duration, server log lines), connection and auth events, and the raw frames. Auth tokens are redacted.
+
+```tsx
+import { ConvexReactClient } from 'convex/react';
+import { convexPlugin, loggedWebSocket } from '@pj21/debug-menu/convex';
+
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
+  webSocketConstructor: loggedWebSocket,
+});
+
+const plugins = [networkPlugin(), convexPlugin() /* … */];
+```
+
+In production (`withDebugMenu` → noop entry) `loggedWebSocket` is the plain `WebSocket`, so no `__DEV__` guard is needed. `ConvexHttpClient` and HTTP actions use `fetch` and still appear in the Network page.
+
 ## Plugins
 
-| Subpath          | Export                                                                           | Purpose                                                                                                 |
-| ---------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `/log`           | `createDebugLog`                                                                 | Generic ring-buffer log + list/detail UI                                                                |
-| `/events`        | `eventsLog`                                                                      | Preset log for `{ name, params?, channels? }`                                                           |
-| `/network`       | `networkPlugin`, `startNetworkLogging`, `clearNetworkLogs`, `getNetworkRequests` | Wraps `react-native-network-logger`; import these instead of the package so production stays free of it |
-| `/environment`   | `environmentPlugin`                                                              | Select env via adapter callbacks                                                                        |
-| `/feature-flags` | `featureFlagsPlugin`                                                             | Auto / On / Off overrides                                                                               |
-| `/info`          | `infoPlugin`                                                                     | Key/value dump + share all                                                                              |
-| `/actions`       | `actionsPlugin`                                                                  | Buttons (any color) in sections, optional confirm                                                       |
+| Subpath          | Export                                                                                         | Purpose                                                                                                 |
+| ---------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `/log`           | `createDebugLog`                                                                               | Generic ring-buffer log + list/detail UI                                                                |
+| `/events`        | `eventsLog`                                                                                    | Preset log for `{ name, params?, channels? }`                                                           |
+| `/network`       | `networkPlugin`, `startNetworkLogging`, `clearNetworkLogs`, `getNetworkRequests`               | Wraps `react-native-network-logger`; import these instead of the package so production stays free of it |
+| `/convex`        | `convexPlugin`, `loggedWebSocket`, `withConvexLogging`, `getConvexEvents`, `clearConvexEvents` | Records Convex WebSocket traffic: queries, mutations, actions, auth/connection events, raw frames       |
+| `/environment`   | `environmentPlugin`                                                                            | Select env via adapter callbacks                                                                        |
+| `/feature-flags` | `featureFlagsPlugin`                                                                           | Auto / On / Off overrides                                                                               |
+| `/info`          | `infoPlugin`                                                                                   | Key/value dump + share all                                                                              |
+| `/actions`       | `actionsPlugin`                                                                                | Buttons (any color) in sections, optional confirm                                                       |
 
 Plugins receive app data only through the adapter options — the provider can sit above app contexts.
 
